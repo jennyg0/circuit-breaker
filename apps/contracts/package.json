@@ -4,10 +4,10 @@
     "private": true,
     "main": "index.js",
     "scripts": {
-        "dev": "hardhat node & yarn compile && yarn deploy --network localhost",
+        "dev": "hardhat node & pnpm compile && pnpm deploy --network localhost",
         "compile": "hardhat compile",
         "download:snark-artifacts": "hardhat run scripts/download-snark-artifacts.ts",
-        "deploy": "yarn compile && hardhat deploy",
+        "deploy": "pnpm compile && hardhat deploy",
         "test": "hardhat run scripts/download-snark-artifacts.ts && hardhat test",
         "test:report-gas": "REPORT_GAS=true hardhat test",
         "test:coverage": "hardhat coverage",
@@ -40,7 +40,10 @@
         "typechain": "^8.0.0"
     },
     "dependencies": {
-        "@semaphore-protocol/contracts": "3.15.2"
+        "@openzeppelin/contracts": "4.1",
+        "@semaphore-protocol/contracts": "3.15.2",
+        "@zk-kit/incremental-merkle-tree.sol": "^1.7.0",
+        "poseidon-solidity": "^0.0.5"
     },
     "config": {
         "solidity": {
