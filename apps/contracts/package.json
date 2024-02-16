@@ -4,10 +4,10 @@
     "private": true,
     "main": "index.js",
     "scripts": {
-        "dev": "hardhat node & pnpm compile && pnpm deploy --network localhost",
+        "dev": "hardhat node & yarn compile && yarn deploy --network localhost",
         "compile": "hardhat compile",
         "download:snark-artifacts": "hardhat run scripts/download-snark-artifacts.ts",
-        "deploy": "pnpm compile && hardhat deploy",
+        "deploy": "yarn compile && hardhat deploy",
         "test": "hardhat run scripts/download-snark-artifacts.ts && hardhat test",
         "test:report-gas": "REPORT_GAS=true hardhat test",
         "test:coverage": "hardhat coverage",
