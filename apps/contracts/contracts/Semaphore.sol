@@ -4,6 +4,7 @@ pragma solidity 0.8.4;
 import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
 import "@semaphore-protocol/contracts/interfaces/ISemaphoreVerifier.sol";
 import "@semaphore-protocol/contracts/base/SemaphoreGroups.sol";
+import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 /// @title Semaphore
 /// @dev This contract uses the Semaphore base contracts to provide a complete service
@@ -13,7 +14,10 @@ import "@semaphore-protocol/contracts/base/SemaphoreGroups.sol";
 /// generated with a new root a duration (or an expiry) within which the proofs generated with that root
 /// can be validated.
 contract Semaphore is ISemaphore, SemaphoreGroups {
+    error NoLensProfile();
+
     ISemaphoreVerifier public verifier;
+    IERC721 public lensHub;
 
     /// @dev Gets a group id and returns the group parameters.
     mapping(uint256 => Group) public groups;
@@ -29,11 +33,10 @@ contract Semaphore is ISemaphore, SemaphoreGroups {
 
     /// @dev Checks if the the transaction sender holds a lens profile.
     modifier onlyLensUser() {
-        //TODO:@jen
         //conditional check for whether user holds lens profile
-        //   if (lensProfileRegistry.hasLensProfile(_msgSender()) == false) {
-        //       revert("Caller doesn't hold a lens profile.");
-        //   }
+          if (lensHub.balanceOf(msg.sender) == 0) {
+              revert NoLensProfile();
+          }
         _;
     }
 
@@ -48,8 +51,9 @@ contract Semaphore is ISemaphore, SemaphoreGroups {
 
     /// @dev Initializes the Semaphore verifier used to verify the user's ZK proofs.
     /// @param _verifier: Semaphore verifier address.
-    constructor(ISemaphoreVerifier _verifier) {
+    constructor(ISemaphoreVerifier _verifier, address _lensHub) {
         verifier = _verifier;
+        lensHub = IERC721( _lensHub);
     }
 
     /// @dev See {ISemaphore-createGroup}.
